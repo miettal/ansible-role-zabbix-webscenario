@@ -1,3 +1,12 @@
+this repository is forked from jdelvecchio/ansible-role-zabbix-webscenario
+
+the purpose of this repository is...
+
+ - Follow new version of Zabbix
+ - Change the interface to the same as community.zabbix https://github.com/ansible-collections/community.zabbix
+ - Improve to be idempotent, flexible and easy to use
+
+
 # ansible-role-zabbix-webscenario
 
 Ansible role which creates or deletes (NO UPDATE) zabbix web scenarios
