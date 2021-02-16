@@ -2,52 +2,35 @@
    "jsonrpc": "2.0",
    "method": "httptest.create",
    "params": {
-      "name": "{{item.name}}",
-      {% if item.zabbix_host is defined %}
-      "hostid": "{{item.zabbix_host.hostid}}",
-      "applicationid": "{{item.zabbix_host.applicationid}}",
-      {% else %}
-      "hostid": "{{z_hostid}}",
-      "applicationid": "{{z_applicationid}}",
-      {% endif %}
-      "delay": "{{z_interval}}",
-      "retries": "{{z_retries}}",
-      "agent": "{{z_agent}}",
-      {% if item.auth is defined %}
+      "name": "{{ name }}",
+      "hostid": "{{ hostid }}",
+      "delay": "{{ interval }}",
+      "retries": "{{ regries }}",
+      "agent": "{{ agent }}",
+      {% if auth is defined %}
       "authentication": 1,
-      "http_user": "{{item.auth.http_user}}",
-      "http_password": "{{item.auth.http_password}}",
+      "http_user": "{{ auth.http_user }}",
+      "http_password": "{{ auth.http_password }}",
       {% endif %}
-      {% if item.https is defined and item.https == 'yes' %}
-        {% if item.ssl_verify_peer is not defined or item.ssl_verify_peer != 'no' %}
+      {% if item.ssl_verify_peer is not defined or item.ssl_verify_peer != 'no' %}
       "verify_peer": 1,
-        {% endif %}
-        {% if item.ssl_verify_host is not defined or item.ssl_verify_host != 'no' %}
+      {% endif %}
+      {% if item.ssl_verify_host is not defined or item.ssl_verify_host != 'no' %}
       "verify_host": 1,
-        {% endif %}
       {% endif %}
       "steps": [
-         {% if item.http is not defined or item.http != 'no' %}
+         {% for step in steps %}
          {
-            "name": "HTTP Homepage",
-            "url": "http://{{item.url}}",
-            "status_codes": "{{item.status_codes|default('200')}}",
-            "retrieve_mode": "{% if (item.method is defined and item.method == 'GET') or item.required is defined %}0{% else %}1{% endif %}",
-            {% if item.required is defined %}
-            "required": "{{item.required}}",
+            "name": "{{ step.name }}",
+            "url": "{{ step.url }}",
+            "status_codes": "{{ step.status_codes|default('200') }}",
+            "retrieve_mode": "{% if (step.method is defined and step.method == 'GET') or step.required is defined %}0{% else %}1{% endif %}",
+            {% if step.required is defined %}
+            "required": "{{ step.required }}",
             {% endif %}
             "no": 1
-         },{% endif %}{% if item.https is defined and item.https == 'yes' %}
-         {
-            "name": "HTTPs Homepage",
-            "url": "https://{{item.url}}",
-            "status_codes": "{{item.status_codes|default('200')}}",
-            "retrieve_mode": "{% if (item.method is defined and item.method == 'GET') or item.required is defined %}0{% else %}1{% endif %}",
-            {% if item.required is defined %}
-            "required": "{{item.required}}",
-            {% endif %}
-            "no": 2
-         }{% endif %}
+         },
+         {% endfor %}
       ]
    },
    "auth": "{{z_authtoken}}",
