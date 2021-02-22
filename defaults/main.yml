@@ -1,10 +1,10 @@
 ---
-z_user: api_ansible
-z_password: 'strongpassword'
+server_url: http://127.0.0.1:8080
+login_user: Admin
+login_password: zabbix
 
-z_url: 'https://zabbix.mycompany.com/api_jsonrpc.php'
-z_host: "zabbixproxy01"
-z_applicationid: 1457
-z_interval: 30
-z_retries: 5
-z_agent: "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.104 Safari/537.36"
+state: present
+
+interval: 30
+regries: 5
+agent: Zabbix

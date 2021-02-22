@@ -2,7 +2,7 @@
    "jsonrpc": "2.0",
    "method": "httptest.delete",
    "params": [
-      "{{item.json.result|map(attribute='httptestid')|list|join(' ')}}"
+      "{{ httptestidquery.json.results.0.httptestid }}"
    ],
    "auth": "{{z_authtoken}}",
    "id": 1
