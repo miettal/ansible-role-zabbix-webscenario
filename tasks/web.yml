@@ -43,7 +43,7 @@
   tags:
     - delete
 
-- name: Getting the hostid of the default http poller (via Zabbix API)
+- name: Getting the hostid and applicationids
   uri:
     url: "{{ server_url }}/api_jsonrpc.php"
     return_content: yes
@@ -54,9 +54,28 @@
   register: hostidquery
   tags:
     - add
-    
-- name: Parsing the get_site request to extract the hostid
-  set_fact: "hostid={{hostidquery.json.result.0.hostid}}"
+
+- name: Parsing the get_host request to extract the hostid
+  set_fact: "hostid={{ hostidquery.json.result.0.hostid }}"
+  tags:
+    - add
+
+- name: Getting application names
+  uri:
+    url: "{{ server_url }}/api_jsonrpc.php"
+    return_content: yes
+    body: "{{lookup('template','templates/get_application.j2')}}"
+    body_format: json
+    headers:
+      Content-Type: "application/json-rpc"
+  register: applicationquery
+  when: "application is defined"
+  tags:
+    - add
+
+- name: Parsing the get_application request to extract the applicationid
+  set_fact: "applicationid={{ (applicationquery.json.result|selectattr('name', 'equalto', application)|first).applicationid }}"
+  when: "application is defined"
   tags:
     - add
 

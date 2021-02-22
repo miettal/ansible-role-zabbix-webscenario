@@ -4,6 +4,9 @@
    "params": {
       "name": "{{ name }}",
       "hostid": "{{ hostid }}",
+      {% if application is defined %}
+      "applicationid": "{{ applicationid }}",
+      {% endif %}
       "delay": "{{ interval }}",
       "retries": "{{ regries }}",
       "agent": "{{ agent }}",
