@@ -17,18 +17,19 @@
   tags:
     - auth
 
-- name: Getting IDs of all web scenarios to delete (via Zabbix API)
+- name: try to get httptest id
   uri:
     url: "{{ server_url }}/api_jsonrpc.php"
     return_content: yes
-    body: "{{lookup('template','templates/get_site.j2')}}"
+    body: "{{lookup('template','templates/get_httptest.j2')}}"
     body_format: json
     headers:
       Content-Type: "application/json-rpc"
   register: httptestidquery
-  when: "state == 'absent'"
-  tags:
-    - delete
+
+- name: Parsing the get_httptest request to extract the httptestid
+  set_fact:
+    httptestid: "{% if httptestidquery.json.result | length > 0 %}{{ httptestidquery.json.result.0.httptestid }}{% endif %}"
 
 - name: Deleting the supposed absent web scenarios in Zabbix
   uri:

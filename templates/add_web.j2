@@ -1,7 +1,14 @@
 {
    "jsonrpc": "2.0",
+   {% if httptestid %}
+   "method": "httptest.update",
+   {% else %}
    "method": "httptest.create",
+   {% endif %}
    "params": {
+      {% if httptestid %}
+      "httptestid": "{{ httptestid }}",
+      {% endif %}
       "name": "{{ name }}",
       "hostid": "{{ hostid }}",
       {% if application is defined %}
