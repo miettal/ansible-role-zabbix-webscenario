@@ -36,7 +36,9 @@
             {% if step.required is defined %}
             "required": "{{ step.required }}",
             {% endif %}
-            "retrieve_mode": "{% if (step.method is defined and step.method == 'GET') or step.required is defined %}0{% else %}1{% endif %}",
+            {% if step.retrieve_mode is defined %}
+            "required": {{ step.retrieve_mode }},
+            {% endif %}
             "status_codes": "{{ step.status_codes|default('200') }}",
             {% if step.timeout is defined %}
             "follow_redirects": {{ step.timeout }},
